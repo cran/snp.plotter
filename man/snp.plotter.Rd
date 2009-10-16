@@ -17,6 +17,8 @@
 		DISP.LDMAP = FALSE, 
 		DISP.TYPE = "symbol", 
 		DISP.MULT.LAB.X = FALSE, 
+		DISP.SNP.NAMES = TRUE,
+		DISP.CONNECTING.LINES = TRUE,
 		LD.TYPE = "dprime", 
 		LD.COLOR.SCHEME = "heat", 
 		USE.COLORS = TRUE, 
@@ -39,7 +41,7 @@
 	\item{config.file}{Name of a configuration file for snp.plotter parameters in the form ATTRIBUTE=value. This option can be used in place of specifying options at the R command line.}
 	\item{SNP.FILE}{Tab-delimited input file containing p-values for single SNPs (see note below). The contents of each SNP.FILE includes four necessary columns ASSOC, SNP.NAME, LOC, and SS.PVAL corresponding to positive or negative association (indicating susceptibility or protective alleles), a SNP label, the location, and a p-value for each SNP. SNP labels cannot start with numbers. Example: "s1.txt,s2.txt,s3.txt" MANDATORY}
 	\item{HAP.FILE}{Tab-delimited input file containing p-values for haplotypes (see note below). The contents of each HAP.FILE includes three necessary columns ASSOC, G.PVAL, and I.PVAL followed by a set of columnns of SNPs with corresponding haplotypes. Haplotypes are presented in a step-wise fashion with the major allele given as 1 and the minor allele as 2; haplotype variants for a set of SNPs should be grouped. SNP labels in HAP.FILE must be the same as in SNP.FILE, and only SNPs with corresponding haplotypes need to be included. Example: "h1.txt,h2.txt,h3.txt" OPTIONAL}
-	\item{GENOTYPE.FILE}{Tab-delimited input file containing genotypes as a PED file with 6 columns preceding the genotype data: family ID, individual ID, father ID, mother ID, sex, and affection status; these coloums are not used in the creation of the LD plot. This file is used for calculating D' or r$^{\textsf{2}}$ values for the LD heatmap plot. Only one LD plot can be shown (see note below). OPTIONAL}
+	\item{GENOTYPE.FILE}{Tab-delimited input file containing genotypes as a PED file with 6 columns preceding the genotype data: family ID, individual ID, father ID, mother ID, sex, and affection status; these coloums are not used in the creation of the LD plot. This file is used for calculating D' or r-squared values for the LD heatmap plot. Only one LD plot can be shown (see note below). OPTIONAL}
 	\item{EVEN.SPACED}{Logical. Should the p-values be displayed at even spacing or at genetic map distances?}
 	\item{USE.GBL.PVAL}{Logical. Use global haplotype p-values (as opposed to individual p-values)? Unfilled symbols connected by solid lines are used to indicate global haplotype p-values, default symbol: circle. Unfilled and filled symbols are used to indicate alleles 1 and 2, respectively connected by solid lines and dashed lines for positive and negative association (indicating susceptibility or protective haplotypes) when using individual haplotype p-values. }
 	\item{DISP.HAP}{Logical. Display haplotype p-values?}
@@ -51,6 +53,8 @@
 	\item{DISP.TYPE}{Options: "symbol"}
 	\item{DISP.MULT.LAB.X}{Logical. Display evenly spaced X-axis tick-labels; up to 5 labels are shown.}
 	\item{DISP.MARKER.LINES}{Logical. Display lines at p-value thresholds of 0.05, 0.01, 0.001, etc.}
+	\item{DISP.SNP.NAMES}{Logical. Display the names of SNPs on a plot.}
+	\item{DISP.CONNECTING.LINES}{Logical. Display connecting lines from p-value plot to LD map.}
 	\item{USE.COLORS}{Logical. Restrict LD heatmap colors and default symbol colors to gray-scale}
 	\item{COLOR.LIST}{List of colors (one for each sample) known to GraphApp (see note below) for displaying p-value symbols. Example: "red,blue,green,black,orange"}
 	\item{SYMBOLS}{Options: circle, square, diamond, triangle; Symbols can either be filled or not filled by appending "-fill" e.s., square-fill. NA may be specified. In this case, the SNP.FILE ASSOC column is read and an up-triangle and down-triangle are used to indicate positive and negative association (indicating susceptibility or protective alleles), respectively. Example: "circle,NA,diamond-fill,triangle"}
@@ -71,7 +75,7 @@
 \value{A list containing two items: config.var and gbl.var, which includes the values of all significant variables used by snp.plotter}
 \details{snp.plotter produces publishable-quality plots of p-values using single SNP 
 and/or haplotype data. Main features of the package include options to display a
- linkage disequilibrium (LD) plot below the p-value plot using either the r$^{\textsf{2}}$ or 
+ linkage disequilibrium (LD) plot below the p-value plot using either the r-squared or 
 D' LD metric with a user-specified LD heatmap color scheme, setting the X-axis 
 to equal spacing or to use the physical SNP map, and specification of plot 
 labels, colors and symbols for desplaying p-values. A major strength of the 
@@ -114,6 +118,8 @@ LDHeatmap package by Ji-Hyung Shin, et al. (2006, version 0.2)}
 		DISP.LDMAP = FALSE, 
 		DISP.TYPE = "symbol", 
 		DISP.MULT.LAB.X = FALSE, 
+		DISP.SNP.NAMES = TRUE,
+		DISP.CONNECTING.LINES = TRUE,
 		LD.TYPE = "dprime", 
 		LD.COLOR.SCHEME = "heat", 
 		USE.COLORS = TRUE, 
@@ -134,7 +140,7 @@ LDHeatmap package by Ji-Hyung Shin, et al. (2006, version 0.2)}
 		)
 }
 }  
-\author{Augustin Luna \email{augustin.luna@mail.nih.gov}, Kristin K. Nicodemus \email{knicodem@jhsph.edu}, \email{nicodemusk@mail.nih.gov}. Website: \url{http://cbdb.nimh.nih.gov/~kristin/snp.plotter.html}}
+\author{Augustin Luna \email{augustin.luna@mail.nih.gov}, Kristin K. Nicodemus \email{kristin.nicodemus@well.ox.ac.uk}, \email{nicodemusk@mail.nih.gov}. Website: \url{http://cbdb.nimh.nih.gov/~kristin/snp.plotter.html}}
 \keyword{aplot}
 \keyword{hplot}
 

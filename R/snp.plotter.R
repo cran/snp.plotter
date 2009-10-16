@@ -40,6 +40,8 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 		DISP.LDMAP = FALSE, 
 		DISP.TYPE = "symbol", 
 		DISP.MULT.LAB.X = FALSE, 
+		DISP.SNP.NAMES = TRUE,
+		DISP.CONNECTING.LINES = TRUE,
 		LD.TYPE = "dprime", 
 		LD.COLOR.SCHEME = "heat", 
 		USE.COLORS = TRUE, 
@@ -139,6 +141,14 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 			if(identical("DISP.PHYS.DIST", tmp[[1]][1])) {
 				config.var$DISP.PHYS.DIST <- as.logical(tmp[[1]][2])
 			} 
+
+			if(identical("DISP.SNP.NAMES", tmp[[1]][1])) {
+				config.var$DISP.SNP.NAMES <- as.logical(tmp[[1]][2])
+			} 
+	
+			if(identical("DISP.CONNECTING.LINES", tmp[[1]][1])) {
+				config.var$DISP.CONNECTING.LINES <- as.logical(tmp[[1]][2])
+			} 	
 	
 			if(identical("GENOTYPE.FILE", tmp[[1]][1])) {
 				config.var$GENOTYPE.FILE <- tmp[[1]][2]
@@ -276,7 +286,7 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 			#cat("length(snp.hash.pos) ", length(snp.hash.pos), "\n")
 
 	        #create a variable with only the sorted SNP positions
-			gbl.var$sorted.snp.pos <- as.numeric(snp.hash.pos)
+			gbl.var$sorted.snp.pos <- sort(as.numeric(snp.hash.pos))
 	
 			#sort the SNP names
 	        for(n in 1:length(snp.hash.pos)) {
@@ -923,7 +933,9 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 		#cat(x.finish.pos, "\n")
 		#cat(gbl.var$sorted.snp.pos, "\n")
 
-		grid.draw(connecting.lines)
+		if(config.var$DISP.CONNECTING.LINES) {
+			grid.draw(connecting.lines)
+		}
 	
 		#DEBUG STATEMENT
 		cat("FINISH DRAW.PLOT.GRID.SETUP\n")
@@ -1065,7 +1077,9 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 				}	
 			}		
 
-			grid.draw(snp.names.grob)
+			if(config.var$DISP.SNP.NAMES) {
+				#grid.draw(snp.names.grob)
+			}
 		}
 
 		#DEBUG STATEMENT
@@ -1521,7 +1535,9 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 	
 		snp.names.pos.x <- (1:gbl.var$snp.num)/gbl.var$snp.num
 		snp.names.pos.y <- ((1:gbl.var$snp.num)/gbl.var$snp.num - 1/gbl.var$snp.num)
-	
+
+		if (config.var$DISP.SNP.NAMES) {
+			
 		snp.names.ld.sec <- textGrob(rev(gbl.var$sorted.snp.names), 
 									 x = seq.x.names[1:gbl.var$snp.num], 
 									 y = seq.y.names[1:gbl.var$snp.num], 
@@ -1529,7 +1545,9 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 									 gp=gpar(cex = (gbl.var$cex.factor - 0.5)), 
 									 just =  c("left"), 
 									 name="snp.names.ld.sec")
-	
+		
+		}
+
 	  	popViewport()
 	
 		#67.5
@@ -1540,8 +1558,12 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 							  angle = 67.5, 
 							  just = c("center", "center"), 
 							  name = "ld.map.vp")
-		ld.map <- gTree(children=gList(image.rect, snp.names.ld.sec), just=c("center", "bottom"), vp=ld.map.vp, name="ld.map")	
-	
+		if (config.var$DISP.SNP.NAMES) {
+			ld.map <- gTree(children=gList(image.rect, snp.names.ld.sec), just=c("center", "bottom"), vp=ld.map.vp, name="ld.map")	
+		} else {
+			ld.map <- gTree(children=gList(image.rect), just=c("center"), vp=ld.map.vp, name="ld.map")			
+		}
+		
 		gene.map.vp <- viewport(name = "gene.map.vp") 
 		gene.map <- gTree(children=gList(map.label.ldtype, map.label.distance), vp = gene.map.vp, name="gene.map")
 		
@@ -1821,6 +1843,8 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 			 DISP.HAP = DISP.HAP, 
 			 DISP.SNP = DISP.SNP, 
 			 DISP.MARKER.LINES = DISP.MARKER.LINES, 
+			 DISP.CONNECTING.LINES = DISP.CONNECTING.LINES, 
+			 DISP.SNP.NAMES = DISP.SNP.NAMES, 			 
 			 LD.COLOR.SCHEME = LD.COLOR.SCHEME, 
 			 COLOR.LIST = COLOR.LIST, 
 			 USE.COLORS = USE.COLORS,
