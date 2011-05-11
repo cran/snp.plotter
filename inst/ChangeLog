@@ -21,4 +21,7 @@ snp.plotter Changelog
 
 - Changed dependency back from GeneticsBase because GeneticsBase is no longer in the Bioconductor repository
 
+==Version 0.4==
 
+- Added new configuration options. Connecting lines can now be vertically adjusted, and fonts and symbols can
+  be scaled to allow a larger number of SNPs to be displayed. 

@@ -17,11 +17,8 @@
 # File: snp.plotter.R
 # Author: Augustin Luna 
 # Email: augustin@mail.nih.gov
-# Phone: 301-594-1244
-# Last Update: 01/17/07
 # Purpose: snp.plotter allows the display of p-values from association or linkage 
 #          analyses with a linkage disequilibrium heatmap.
-# 
 ###########################################################################
 
 #snp.plotter allows the display of p-values from association or linkage analyses with a linkage disequilibrium heatmap.
@@ -53,10 +50,13 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 		IMAGE.SIZE = 3.5,  
 		CONNECTING.LINES.FACTOR = 1, 
 		CONNECTING.LINES.ADJ = 0, 
+		CONNECTING.LINES.VERT.ADJ = -1, 
 		CONNECTING.LINES.FLEX = 0, 
 		SNP.FILE = NULL, 
 		HAP.FILE = NULL, 
-		GENOTYPE.FILE = NULL, 
+		GENOTYPE.FILE = NULL,
+		FONT.FACTOR = NULL,
+		SYMBOL.FACTOR = NULL,
 		config.file = NULL) {
 	
 	#Read in configuration file
@@ -122,7 +122,7 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 				config.var$LD.COLOR.SCHEME <- tmp[[1]][2]
 			} 
 	
-	        	if(identical("USE.COLORS", tmp[[1]][1])) {
+	        if(identical("USE.COLORS", tmp[[1]][1])) {
 				config.var$USE.COLORS <- as.logical(tmp[[1]][2])
 			}
 	
@@ -189,9 +189,21 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 			if(identical("CONNECTING.LINES.ADJ", tmp[[1]][1])) {
 				config.var$CONNECTING.LINES.ADJ <- as.numeric(tmp[[1]][2])
 			}
+			
+			if(identical("CONNECTING.LINES.VERT.ADJ", tmp[[1]][1])) {
+				config.var$CONNECTING.LINES.VERT.ADJ <- as.numeric(tmp[[1]][2])
+			}
 	
 			if(identical("CONNECTING.LINES.FLEX", tmp[[1]][1])) {
 				config.var$CONNECTING.LINES.FLEX <- as.numeric(tmp[[1]][2])
+			}
+			
+			if(identical("FONT.FACTOR", tmp[[1]][1])) {
+				config.var$FONT.FACTOR <- as.numeric(tmp[[1]][2])
+			}
+			
+			if(identical("SYMBOL.FACTOR", tmp[[1]][1])) {
+				config.var$SYMBOL.FACTOR <- as.numeric(tmp[[1]][2])
 			}
 		}
 	
@@ -832,6 +844,16 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 		#DEBUG STATEMENT
 		#cat("gbl.var$axis.y[1] ", gbl.var$axis.y[1], "\n")
 		#cat("y.finish.pos ", y.finish.pos, "\n")
+		
+		if(config.var$CONNECTING.LINES.VERT.ADJ != -1) {
+			y.start.pos <- config.var$CONNECTING.LINES.VERT.ADJ
+		} else if (config.var$IMAGE.SIZE == 3.5) {
+			y.start.pos <- -0.5	
+		} else if (config.var$IMAGE.SIZE == 7) {
+			y.start.pos <- -0.7 
+		} else {
+			stop("Invalid image size: ", config.var$IMAGE.SIZE, "\n")
+		}
                                                
 		if(config.var$DISP.LDMAP) {
 
@@ -843,14 +865,14 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 					connecting.lines <- segmentsGrob(x0 = (seq(1, length(gbl.var$sorted.snp.pos)) + config.var$CONNECTING.LINES.ADJ), 
 													 x1 = seq(1, length(gbl.var$sorted.snp.pos)), 
 													 y0 = unit(y.finish.pos, "char"), 
-													 y1 = unit(-0.5, "char"), 
+													 y1 = unit(y.start.pos, "char"), 
 													 default.units = "native", 
 													 gp = gpar(lwd = gbl.var$line.width))	
 				} else if(config.var$IMAGE.SIZE == 7) {
 					connecting.lines <- segmentsGrob(x0 = (seq(1, length(gbl.var$sorted.snp.pos)) + config.var$CONNECTING.LINES.ADJ), 
 													 x1 = seq(1, length(gbl.var$sorted.snp.pos)), 
 													 y0 = unit(y.finish.pos, "char"), 
-													 y1 = unit(-0.7 ,"char"), 
+													 y1 = unit(y.start.pos,"char"), 
 													 default.units = "native", 
 													 gp = gpar(lwd = gbl.var$line.width))	
 				} else {
@@ -866,14 +888,14 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 					connecting.lines <- segmentsGrob(x0 = x.finish.pos, 
 													 x1 = gbl.var$sorted.snp.pos, 
 													 y0 = unit(y.finish.pos, "char"), 
-													 y1 = unit(-0.5, "char"), 
+													 y1 = unit(y.start.pos, "char"), 
 													 default.units = "native", 
 													 gp = gpar(lwd = gbl.var$line.width))	
 				} else if(config.var$IMAGE.SIZE == 7) {
 					connecting.lines <- segmentsGrob(x0 = x.finish.pos, 
 													 x1 = gbl.var$sorted.snp.pos, 
 													 y0 = unit(y.finish.pos, "char"), 
-													 y1 = unit(-0.7 ,"char"), 
+													 y1 = unit(y.start.pos,"char"), 
 													 default.units = "native", 
 													 gp = gpar(lwd = gbl.var$line.width))	
 				} else {
@@ -887,14 +909,14 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 					connecting.lines <- segmentsGrob(x0 = (seq(1, length(gbl.var$sorted.snp.pos)) + config.var$CONNECTING.LINES.ADJ), 
 													 x1 = seq(1, length(gbl.var$sorted.snp.pos)), 
 	 											 	 y0 = unit(y.finish.pos, "char"), 
-													 y1 = unit(-0.5, "char"), 
+													 y1 = unit(y.start.pos, "char"), 
 													 default.units = "native" , 
 													 gp = gpar(lwd = gbl.var$line.width))	
 				} else if(config.var$IMAGE.SIZE == 7) {
 					connecting.lines <- segmentsGrob(x0 = (seq(1, length(gbl.var$sorted.snp.pos)) + config.var$CONNECTING.LINES.ADJ), 
 													 x1 = seq(1, length(gbl.var$sorted.snp.pos)), 
 													 y0 = unit(y.finish.pos, "char"), 
-													 y1 = unit(-0.7, "char"), 
+													 y1 = unit(y.start.pos, "char"), 
 													 default.units = "native" , 
 													 gp = gpar(lwd = gbl.var$line.width))	
 				} else {
@@ -910,14 +932,14 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 					connecting.lines <- segmentsGrob(x0 = x.finish.pos, 
 													 x1 = gbl.var$sorted.snp.pos, 
 	 											 	 y0 = unit(y.finish.pos, "char"), 
-													 y1 = unit(-0.5, "char"), 
+													 y1 = unit(y.start.pos, "char"), 
 													 default.units = "native" , 
 													 gp = gpar(lwd = gbl.var$line.width))	
 				} else if(config.var$IMAGE.SIZE == 7) {
 					connecting.lines <- segmentsGrob(x0 = x.finish.pos, 
 													 x1 = gbl.var$sorted.snp.pos, 
 													 y0 = unit(y.finish.pos, "char"), 
-													 y1 = unit(-0.7, "char"), 
+													 y1 = unit(y.start.pos, "char"), 
 													 default.units = "native" , 
 													 gp = gpar(lwd = gbl.var$line.width))	
 				} else {
@@ -1091,11 +1113,18 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 	
 		#DEBUG STATEMENT
 		cat("START DRAW.PLOT.GRID.SS\n")
+
+		# Grab from configuration is available 
+		if(is.null(config.var$SYMBOL.FACTOR)) {
+			tmp.cex.factor.symbol = gbl.var$cex.factor.symbol
+		} else {
+			tmp.cex.factor.symbol = config.var$SYMBOL.FACTOR
+		}
 	
 		if(config.var$DISP.SNP) {
 		  	if(config.var$DISP.TYPE == "allele") {
 		  		grid.text(gbl.var$snp.data$MAJOR.ALLELE, gbl.var$sorted.snp.pos, gbl.var$snp.data$SS.PVAL, 
-						  default.units = "native", gp = gpar(col = gbl.var$color.list[gbl.var$cur.sample], cex = gbl.var$cex.factor.symbol))
+						  default.units = "native", gp = gpar(col = gbl.var$color.list[gbl.var$cur.sample], cex = tmp.cex.factor.symbol))
 		  	}
 		  	else if(config.var$DISP.TYPE == "base") {
 		  		for (i in 1:nrow(gbl.var$snp.data)) {
@@ -1109,7 +1138,7 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 									  default.units = "native", 
 									  gp = gpar(col = gbl.var$color.list[gbl.var$cur.sample],
 									  			fontface = "italic", 
-												cex = gbl.var$cex.factor.symbol))
+												cex = tmp.cex.factor.symbol))
 		  				}
 		  				else if(gbl.var$snp.data$MAJOR.ALLELE[i] == 2) {
 		  					gbl.var$snp.data$MAJOR.ALLELE[i] <- gbl.var$snp.bases[[i]][2]
@@ -1118,7 +1147,7 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 									  gbl.var$snp.data$SS.PVAL[i], 
 									  default.units = "native", 
 									  gp = gpar(col = gbl.var$color.list[gbl.var$cur.sample], 
-									  cex = gbl.var$cex.factor.symbol))
+									  cex = tmp.cex.factor.symbol))
 		  				}
 		  			}
 		  		}
@@ -1134,7 +1163,7 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 											gbl.var$snp.data$SS.PVAL[i], 
 											pch = 24, 
 											gp = gpar(col = gbl.var$color.list[gbl.var$cur.sample], 
-													  cex = gbl.var$cex.factor.symbol, 
+													  cex = tmp.cex.factor.symbol, 
 													  fill = gbl.var$fill.list[gbl.var$cur.sample],
 													  lwd = gbl.var$line.width))
 		  					}
@@ -1143,7 +1172,7 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 											gbl.var$snp.data$SS.PVAL[i], 
 											pch = 25, 
 											gp = gpar(col = gbl.var$color.list[gbl.var$cur.sample], 
-													  cex = gbl.var$cex.factor.symbol,
+													  cex = tmp.cex.factor.symbol,
 													  fill = gbl.var$fill.list[gbl.var$cur.sample], 
 													  lwd = gbl.var$line.width))
 		  					}
@@ -1153,7 +1182,7 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 										gbl.var$snp.data$SS.PVAL[i], 
 										pch = gbl.var$symbol.list[gbl.var$cur.sample],
 										gp = gpar(col = gbl.var$color.list[gbl.var$cur.sample], 
-												  cex = gbl.var$cex.factor.symbol, 
+												  cex = tmp.cex.factor.symbol, 
 												  fill = gbl.var$fill.list[gbl.var$cur.sample], 
 												  lwd = gbl.var$line.width))
 		  				}
@@ -1176,6 +1205,13 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 		cat("START DRAW.PLOT.GRID.HAP\n")
 
 		tmp.colnames.loc <- NULL
+		
+		# Grab from configuration is available 
+		if(is.null(config.var$SYMBOL.FACTOR)) {
+			tmp.cex.factor.symbol = gbl.var$cex.factor.symbol
+		} else {
+			tmp.cex.factor.symbol = config.var$SYMBOL.FACTOR
+		}
 	
 		if(config.var$DISP.HAP) {
 	
@@ -1223,14 +1259,14 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 										rep(gbl.var$hap.data$G.PVAL[i], length(cur.haplo)), 
 										pch = 21, 
 										gp = gpar(col = gbl.var$color.list[gbl.var$cur.sample], 
-												  cex = gbl.var$cex.factor.symbol, 
+												  cex = tmp.cex.factor.symbol, 
 												  lwd = gbl.var$line.width))
 						} else {
 							grid.points(gbl.var$snp.data$LOC[tmp.colnames.loc], 
 										rep(gbl.var$hap.data$G.PVAL[i], length(cur.haplo)), 
 										pch = gbl.var$symbol.list[gbl.var$cur.sample], 
 										gp = gpar(col = gbl.var$color.list[gbl.var$cur.sample], 
-												  cex = gbl.var$cex.factor.symbol, 
+												  cex = tmp.cex.factor.symbol, 
 												  lwd = gbl.var$line.width, 
 												  fill = gbl.var$fill.list[gbl.var$cur.sample]))
 						}
@@ -1322,7 +1358,7 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 													gbl.var$hap.data$I.PVAL[i], 
 													pch = gbl.var$symbol.list[gbl.var$cur.sample], 
 													gp = gpar(col = gbl.var$color.list[gbl.var$cur.sample], 
-															  cex = gbl.var$cex.factor.symbol, 
+															  cex = tmp.cex.factor.symbol, 
 															  lwd = gbl.var$line.width, 
 															  fill = gbl.var$color.list[gbl.var$cur.sample]))
 									} else if(gbl.var$hap.data[i, cur.haplo[j]] == 2) {
@@ -1330,7 +1366,7 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 													gbl.var$hap.data$I.PVAL[i], 
 													pch = gbl.var$symbol.list[gbl.var$cur.sample], 
 													gp = gpar(col = gbl.var$color.list[gbl.var$cur.sample], 
-															  cex = gbl.var$cex.factor.symbol, 
+															  cex = tmp.cex.factor.symbol, 
 															  lwd = gbl.var$line.width))
 									}
 									else {
@@ -1536,16 +1572,20 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 		snp.names.pos.x <- (1:gbl.var$snp.num)/gbl.var$snp.num
 		snp.names.pos.y <- ((1:gbl.var$snp.num)/gbl.var$snp.num - 1/gbl.var$snp.num)
 
-		if (config.var$DISP.SNP.NAMES) {
-			
-		snp.names.ld.sec <- textGrob(rev(gbl.var$sorted.snp.names), 
-									 x = seq.x.names[1:gbl.var$snp.num], 
-									 y = seq.y.names[1:gbl.var$snp.num], 
-									 rot=-45, 
-									 gp=gpar(cex = (gbl.var$cex.factor - 0.5)), 
-									 just =  c("left"), 
-									 name="snp.names.ld.sec")
-		
+		if(is.null(config.var$FONT.FACTOR)) {
+			tmp.font.factor = (gbl.var$cex.factor - 0.5)
+		} else {
+			tmp.font.factor = config.var$FONT.FACTOR
+		}
+
+		if (config.var$DISP.SNP.NAMES) {						
+			snp.names.ld.sec <- textGrob(rev(gbl.var$sorted.snp.names), 
+										 x = seq.x.names[1:gbl.var$snp.num], 
+										 y = seq.y.names[1:gbl.var$snp.num], 
+										 rot=-45, 
+										 gp=gpar(cex = tmp.font.factor), 
+										 just =  c("left"), 
+										 name="snp.names.ld.sec")
 		}
 
 	  	popViewport()
@@ -1622,8 +1662,9 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 			cex.factor <- 0.4 * sec.cex.factor
 		} else if(gbl.var$snp.num > 90 & gbl.var$snp.num <= 120) {
 			cex.factor <- 0.2 * sec.cex.factor
-		} else if(gbl.var$snp.num > 120) {
-			cex.factor <- 0.1  * sec.cex.factor
+		} else if(gbl.var$snp.num > 150) {
+			cex.factor <- 0.1 * sec.cex.factor
+			line.width <- 0.5
 		}
 
 		#DEBUG STATEMENT
@@ -1632,6 +1673,7 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 		#cat("line.width ", line.width, "\n")
 		#cat("cex.factor.symbol ", cex.factor.symbol, "\n")
 		#cat("cex.factor ", cex.factor, "\n")
+		#cat("sec.cex.factor ", sec.cex.factor, "\n")
 	
 		#DEBUG STATEMENT
 		cat("FINISH SET.IMAGE.PARAMETERS\n")
@@ -1785,7 +1827,7 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 
 	palette.size <- 20
 	cex.factor <- 0.5
-	cex.factor.symbol <- 0.5
+	cex.factor.symbol <- 0.25
 	font.size <- NULL
 	line.width <- 0.5
 
@@ -1861,7 +1903,10 @@ snp.plotter <- function(EVEN.SPACED = FALSE,
 			 IMAGE.NAME = IMAGE.NAME,
 			 CONNECTING.LINES.FACTOR = CONNECTING.LINES.FACTOR,
 			 CONNECTING.LINES.ADJ = CONNECTING.LINES.ADJ,
-			 CONNECTING.LINES.FLEX = CONNECTING.LINES.FLEX)
+			 CONNECTING.LINES.VERT.ADJ = CONNECTING.LINES.VERT.ADJ,
+			 CONNECTING.LINES.FLEX = CONNECTING.LINES.FLEX,
+			 FONT.FACTOR = FONT.FACTOR,
+			 SYMBOL.FACTOR = SYMBOL.FACTOR)
 
 	#-------------------CONFIGURATION VARIABLES BEGINS---------
 	

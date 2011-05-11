@@ -1,9 +1,9 @@
 Package: snp.plotter
-Version: 0.3.1
-Date: 2010-11-22
+Version: 0.4
+Date: 2011-05-11
 Title: snp.plotter
 Author: Augustin Luna <augustin@mail.nih.gov>, Kristin K. Nicodemus
-        <kristin.nicodemus@dpag.ox.ac.uk>
+        <kristin.nicodemus@well.ox.ac.uk>, <nicodemusk@mail.nih.gov>
 Maintainer: Augustin Luna <augustin@mail.nih.gov>
 Depends: R (>= 2.0.0), genetics, grid
 Description: Creates plots of p-values using single SNP and/or
@@ -15,6 +15,6 @@ Description: Creates plots of p-values using single SNP and/or
         files.
 License: GPL (>= 2)
 URL: http://cbdb.nimh.nih.gov/~kristin/snp.plotter.html
-Packaged: 2010-11-28 15:16:58 UTC; Default
+Packaged: 2012-10-29 08:59:47 UTC; ripley
 Repository: CRAN
-Date/Publication: 2010-11-29 08:24:06
+Date/Publication: 2012-10-29 08:59:47

@@ -30,10 +30,13 @@
 		IMAGE.SIZE = 3.5,  
 		CONNECTING.LINES.FACTOR = 1, 
 		CONNECTING.LINES.ADJ = 0, 
+		CONNECTING.LINES.VERT.ADJ = -1, 
 		CONNECTING.LINES.FLEX = 0, 
 		SNP.FILE = NULL, 
 		HAP.FILE = NULL, 
 		GENOTYPE.FILE = NULL, 
+		FONT.FACTOR = NULL,
+		SYMBOL.FACTOR = NULL, 
 		config.file = NULL
 		)
  } 
@@ -69,8 +72,11 @@
 	\item{LD.TYPE}{LD metric. Options: "dprime" or "rsquare"}
 	\item{LD.COLOR.SCHEME}{LD heatmap color scheme. Options: heat (red-yellow-white), cm (cyan-magenta), topo (topographical map colors), gray (gray-scale), or custom; custom requires palette file (PALETTE.FILE) to be defined}
 	\item{CONNECTING.LINES.FACTOR}{Adjusts the length of the connecting lines. Range: 0-2}
-	\item{CONNECTING.LINES.ADJ}{Can be used adjust the position of connecting lines in relation to SNP names. Negative values shift the connecting lines to the left and positive values shift the lines to the right. Range: 0-1}
+	\item{CONNECTING.LINES.ADJ}{Can be used to adjust the position of connecting lines in relation to SNP names. Negative values shift the connecting lines to the left and positive values shift the lines to the right. Range: 0-1}
+	\item{CONNECTING.LINES.VERT.ADJ}{Can be used to vertically adjust the position of connecting lines in relation to SNP names. More negative value shift the connecting lines down. Range: -0.5-0}	
 	\item{CONNECTING.LINES.FLEX}{Adjusts the spread of the connecting lines. Range: 0-2}	
+	\item{SYMBOL.FACTOR}{Scaling value for symbols. Larger values are generate larger symbols. Range: 0-1}	
+	\item{FONT.FACTOR}{Scaling value for SNP names. Larger values are generate larger SNP names. Range: 0-1}	
 } 
 \value{A list containing two items: config.var and gbl.var, which includes the values of all significant variables used by snp.plotter}
 \details{snp.plotter produces publishable-quality plots of p-values using single SNP 
@@ -132,10 +138,13 @@ LDHeatmap package by Ji-Hyung Shin, et al. (2006, version 0.2)}
 		IMAGE.SIZE = 3.5,  
 		CONNECTING.LINES.FACTOR = 1, 
 		CONNECTING.LINES.ADJ = 0, 
+		CONNECTING.LINES.VERT.ADJ = 0, 
 		CONNECTING.LINES.FLEX = 0, 
 		SNP.FILE = NULL, 
 		HAP.FILE = NULL, 
 		GENOTYPE.FILE = NULL, 
+		FONT.FACTOR = NULL,
+		SYMBOL.FACTOR = NULL, 
 		config.file = NULL
 		)
 }
